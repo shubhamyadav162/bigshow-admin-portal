@@ -3,189 +3,83 @@ import { DashboardLayout } from "@/components/DashboardLayout"
 import { DashboardCard } from "@/components/DashboardCard"
 import { RecentTransactions } from "@/components/RecentTransactions"
 import { UsersChart } from "@/components/UsersChart"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { useToast } from "@/hooks/use-toast"
-import { Calendar, TrendingUp, Users, Video, DollarSign, Activity } from "lucide-react"
+import { Users, Calendar, Upload, ChevronUp } from "lucide-react"
 
 const Index = () => {
-  const { toast } = useToast()
-
-  const handleExportData = () => {
-    toast({
-      title: "Export Started",
-      description: "Your data export is being processed. You'll receive an email when it's ready.",
-    })
-  }
-
-  const handleViewDetails = (metric: string) => {
-    toast({
-      title: "View Details",
-      description: `Viewing detailed analytics for ${metric}`,
-    })
-  }
-
-  const handleQuickAction = (action: string) => {
-    toast({
-      title: "Quick Action",
-      description: `${action} action initiated`,
-    })
-  }
-
   return (
     <DashboardLayout>
-      <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
-        <div className="flex items-center justify-between space-y-2">
-          <h2 className="text-3xl font-bold tracking-tight text-white">Dashboard</h2>
-          <div className="flex items-center space-x-2">
-            <Button variant="outline" onClick={handleExportData}>
-              Export Data
-            </Button>
-            <Button onClick={() => handleQuickAction("Refresh")}>
-              Refresh
-            </Button>
-          </div>
+      <div className="space-y-6 animate-fade-in">
+        {/* Header */}
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold text-foreground">Dashboard Overview</h1>
+          <p className="text-muted-foreground">Welcome back to BigShow OTT Admin Panel</p>
         </div>
-        
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+
+        {/* Stats Cards */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <DashboardCard
+            title="Total Users"
+            value="12,458"
+            subtitle="from last month"
+            icon={<Users className="h-4 w-4 text-primary" />}
+            trend={{ value: 12.5, isPositive: true }}
+          />
+          <DashboardCard
+            title="Active Subscriptions"
+            value="8,942"
+            subtitle="from last month"
+            icon={<Calendar className="h-4 w-4 text-primary" />}
+            trend={{ value: 8.2, isPositive: true }}
+          />
           <DashboardCard
             title="Total Revenue"
-            value="₹45,231.89"
-            description="+20.1% from last month"
-            icon={DollarSign}
-            trend="up"
+            value="₹2,48,750"
+            subtitle="from last month"
+            icon={<ChevronUp className="h-4 w-4 text-primary" />}
+            trend={{ value: 15.3, isPositive: true }}
           />
           <DashboardCard
-            title="Active Users"
-            value="2,350"
-            description="+180.1% from last month"
-            icon={Users}
-            trend="up"
-          />
-          <DashboardCard
-            title="Total Videos"
-            value="12,234"
-            description="+19% from last month"
-            icon={Video}
-            trend="up"
-          />
-          <DashboardCard
-            title="Active Now"
-            value="573"
-            description="+201 since last hour"
-            icon={Activity}
-            trend="up"
+            title="Web Series"
+            value="248"
+            subtitle="total uploaded"
+            icon={<Upload className="h-4 w-4 text-primary" />}
+            trend={{ value: 2.1, isPositive: true }}
           />
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-          <div className="col-span-4">
-            <UsersChart />
-          </div>
-          <div className="col-span-3">
-            <RecentTransactions />
-          </div>
+        {/* Charts and Tables */}
+        <div className="grid gap-6 lg:grid-cols-2">
+          <UsersChart />
+          <RecentTransactions />
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5" />
-                Quick Actions
-              </CardTitle>
-              <CardDescription>
-                Frequently used admin actions
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <Button 
-                className="w-full justify-start" 
-                variant="outline"
-                onClick={() => handleQuickAction("Add New Series")}
-              >
-                Add New Series
-              </Button>
-              <Button 
-                className="w-full justify-start" 
-                variant="outline"
-                onClick={() => handleQuickAction("Send Notification")}
-              >
-                Send Notification
-              </Button>
-              <Button 
-                className="w-full justify-start" 
-                variant="outline"
-                onClick={() => handleQuickAction("Generate Report")}
-              >
-                Generate Report
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>System Status</CardTitle>
-              <CardDescription>
-                Current system health
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Server Status</span>
-                <Badge variant="default">Online</Badge>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm">CDN Status</span>
-                <Badge variant="default">Operational</Badge>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Database</span>
-                <Badge variant="default">Connected</Badge>
-              </div>
-              <Button 
-                size="sm" 
-                className="w-full"
-                onClick={() => handleViewDetails("System Health")}
-              >
-                View Details
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Activity</CardTitle>
-              <CardDescription>
-                Latest platform activities
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2 text-sm">
-                <div className="border-l-2 border-blue-500 pl-2">
-                  <p className="font-medium">New user registered</p>
-                  <p className="text-muted-foreground">2 minutes ago</p>
+        {/* Popular Series */}
+        <div className="grid gap-6">
+          <div className="rounded-lg border border-border bg-card p-6">
+            <h3 className="text-lg font-semibold mb-4">Most Watched Series</h3>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              {[
+                { title: "The Crown Chronicles", views: "2.4M", rating: "4.8" },
+                { title: "Mumbai Nights", views: "1.8M", rating: "4.6" },
+                { title: "Tech Titans", views: "1.5M", rating: "4.7" },
+                { title: "Family Secrets", views: "1.2M", rating: "4.5" },
+              ].map((series, index) => (
+                <div key={index} className="flex items-center gap-3 p-3 rounded-md bg-muted/50 hover:bg-muted transition-colors">
+                  <div className="w-12 h-12 bg-primary/20 rounded-md flex items-center justify-center">
+                    <span className="text-primary font-bold">#{index + 1}</span>
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-foreground">{series.title}</p>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <span>{series.views} views</span>
+                      <span>•</span>
+                      <span>⭐ {series.rating}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="border-l-2 border-green-500 pl-2">
-                  <p className="font-medium">Series uploaded</p>
-                  <p className="text-muted-foreground">15 minutes ago</p>
-                </div>
-                <div className="border-l-2 border-orange-500 pl-2">
-                  <p className="font-medium">Payment processed</p>
-                  <p className="text-muted-foreground">1 hour ago</p>
-                </div>
-              </div>
-              <Button 
-                size="sm" 
-                variant="outline" 
-                className="w-full mt-3"
-                onClick={() => handleViewDetails("Activity Log")}
-              >
-                View All Activity
-              </Button>
-            </CardContent>
-          </Card>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </DashboardLayout>
