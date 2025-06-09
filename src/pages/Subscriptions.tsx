@@ -1,49 +1,149 @@
 
+import { useState } from "react"
 import { DashboardLayout } from "@/components/DashboardLayout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search, Filter, Download } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useToast } from "@/hooks/use-toast"
+import { Search, Filter, Download, Eye, Edit, Ban, CheckCircle } from "lucide-react"
 
-const subscriptionData = [
-  {
-    id: "SUB001",
-    userName: "John Doe",
-    email: "john@example.com",
-    planName: "Premium Monthly",
-    amount: "₹299",
-    paymentMethod: "Razorpay",
-    status: "Active",
-    startDate: "2024-01-15",
-    nextBilling: "2024-02-15"
-  },
-  {
-    id: "SUB002",
-    userName: "Jane Smith",
-    email: "jane@example.com",
-    planName: "Basic Annual",
-    amount: "₹1999",
-    paymentMethod: "LightSpeed",
-    status: "Active",
-    startDate: "2024-01-10",
-    nextBilling: "2025-01-10"
-  },
-  {
-    id: "SUB003",
-    userName: "Mike Johnson",
-    email: "mike@example.com",
-    planName: "Premium Annual",
-    amount: "₹2999",
-    paymentMethod: "Razorpay",
-    status: "Expired",
-    startDate: "2023-12-01",
-    nextBilling: "2024-12-01"
-  }
-]
+interface Subscription {
+  id: string
+  userName: string
+  email: string
+  planName: string
+  amount: string
+  paymentMethod: string
+  status: "Active" | "Expired" | "Cancelled" | "Pending"
+  startDate: string
+  nextBilling: string
+}
 
 export default function Subscriptions() {
+  const { toast } = useToast()
+  const [searchTerm, setSearchTerm] = useState("")
+  const [statusFilter, setStatusFilter] = useState("all")
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>([
+    {
+      id: "SUB001",
+      userName: "John Doe",
+      email: "john@example.com",
+      planName: "Premium Monthly",
+      amount: "₹299",
+      paymentMethod: "Razorpay",
+      status: "Active",
+      startDate: "2024-01-15",
+      nextBilling: "2024-02-15"
+    },
+    {
+      id: "SUB002",
+      userName: "Jane Smith",
+      email: "jane@example.com",
+      planName: "Basic Annual",
+      amount: "₹1999",
+      paymentMethod: "LightSpeed",
+      status: "Active",
+      startDate: "2024-01-10",
+      nextBilling: "2025-01-10"
+    },
+    {
+      id: "SUB003",
+      userName: "Mike Johnson",
+      email: "mike@example.com",
+      planName: "Premium Annual",
+      amount: "₹2999",
+      paymentMethod: "Razorpay",
+      status: "Expired",
+      startDate: "2023-12-01",
+      nextBilling: "2024-12-01"
+    }
+  ])
+
+  const exportData = () => {
+    toast({
+      title: "Export Started",
+      description: "Subscription data is being exported. You'll receive an email when ready."
+    })
+  }
+
+  const viewSubscription = (subscriptionId: string) => {
+    toast({
+      title: "View Subscription",
+      description: `Viewing details for subscription ${subscriptionId}`
+    })
+  }
+
+  const editSubscription = (subscriptionId: string) => {
+    toast({
+      title: "Edit Subscription",
+      description: `Opening editor for subscription ${subscriptionId}`
+    })
+  }
+
+  const suspendSubscription = (subscriptionId: string) => {
+    setSubscriptions(subs => 
+      subs.map(sub => 
+        sub.id === subscriptionId 
+          ? { ...sub, status: "Cancelled" as const }
+          : sub
+      )
+    )
+    toast({
+      title: "Subscription Suspended",
+      description: `Subscription ${subscriptionId} has been suspended`
+    })
+  }
+
+  const reactivateSubscription = (subscriptionId: string) => {
+    setSubscriptions(subs => 
+      subs.map(sub => 
+        sub.id === subscriptionId 
+          ? { ...sub, status: "Active" as const }
+          : sub
+      )
+    )
+    toast({
+      title: "Subscription Reactivated",
+      description: `Subscription ${subscriptionId} has been reactivated`
+    })
+  }
+
+  const applyFilters = () => {
+    toast({
+      title: "Filters Applied",
+      description: `Filtering by status: ${statusFilter}, search: ${searchTerm}`
+    })
+  }
+
+  const clearFilters = () => {
+    setSearchTerm("")
+    setStatusFilter("all")
+    toast({
+      title: "Filters Cleared",
+      description: "All filters have been reset"
+    })
+  }
+
+  const filteredSubscriptions = subscriptions.filter(sub => {
+    const matchesSearch = sub.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         sub.email.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = statusFilter === "all" || sub.status.toLowerCase() === statusFilter
+    return matchesSearch && matchesStatus
+  })
+
+  const getStatusVariant = (status: string) => {
+    switch (status) {
+      case "Active": return "default"
+      case "Expired": return "destructive"
+      case "Cancelled": return "secondary"
+      case "Pending": return "outline"
+      default: return "outline"
+    }
+  }
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -52,7 +152,7 @@ export default function Subscriptions() {
             <h1 className="text-3xl font-bold text-white">Subscriptions</h1>
             <p className="text-muted-foreground mt-2">Manage user subscriptions and billing</p>
           </div>
-          <Button className="bg-accent hover:bg-accent/90">
+          <Button className="bg-accent hover:bg-accent/90" onClick={exportData}>
             <Download className="h-4 w-4 mr-2" />
             Export Data
           </Button>
@@ -107,11 +207,31 @@ export default function Subscriptions() {
               <div className="flex space-x-2">
                 <div className="relative">
                   <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Search subscriptions..." className="pl-8" />
+                  <Input 
+                    placeholder="Search subscriptions..." 
+                    className="pl-8"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
                 </div>
-                <Button variant="outline">
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                  <SelectTrigger className="w-32">
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Status</SelectItem>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="expired">Expired</SelectItem>
+                    <SelectItem value="cancelled">Cancelled</SelectItem>
+                    <SelectItem value="pending">Pending</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button variant="outline" onClick={applyFilters}>
                   <Filter className="h-4 w-4 mr-2" />
-                  Filter
+                  Apply
+                </Button>
+                <Button variant="outline" onClick={clearFilters}>
+                  Clear
                 </Button>
               </div>
             </div>
@@ -130,7 +250,7 @@ export default function Subscriptions() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {subscriptionData.map((subscription) => (
+                {filteredSubscriptions.map((subscription) => (
                   <TableRow key={subscription.id}>
                     <TableCell>
                       <div>
@@ -146,13 +266,45 @@ export default function Subscriptions() {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <Badge variant={subscription.status === "Active" ? "default" : "destructive"}>
+                      <Badge variant={getStatusVariant(subscription.status)}>
                         {subscription.status}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-white">{subscription.nextBilling}</TableCell>
                     <TableCell>
-                      <Button variant="outline" size="sm">View</Button>
+                      <div className="flex space-x-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => viewSubscription(subscription.id)}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => editSubscription(subscription.id)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        {subscription.status === "Active" ? (
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => suspendSubscription(subscription.id)}
+                          >
+                            <Ban className="h-4 w-4" />
+                          </Button>
+                        ) : subscription.status === "Cancelled" && (
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => reactivateSubscription(subscription.id)}
+                          >
+                            <CheckCircle className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
