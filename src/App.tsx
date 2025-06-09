@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import UploadSeries from "./pages/UploadSeries";
 import Subscriptions from "./pages/Subscriptions";
 import Users from "./pages/Users";
+import Notifications from "./pages/Notifications";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/upload" element={<UploadSeries />} />
           <Route path="/subscriptions" element={<Subscriptions />} />
           <Route path="/users" element={<Users />} />
+          <Route path="/admin/notifications" element={<Notifications />} />
           <Route path="/settings" element={<Settings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

@@ -11,7 +11,7 @@ import {
   SidebarHeader,
   SidebarFooter,
 } from "@/components/ui/sidebar"
-import { LayoutDashboard, Upload, Users, Calendar, Settings } from "lucide-react"
+import { LayoutDashboard, Upload, Users, Calendar, Bell, Settings } from "lucide-react"
 
 const menuItems = [
   {
@@ -33,6 +33,11 @@ const menuItems = [
     title: "Users",
     url: "/users",
     icon: Users,
+  },
+  {
+    title: "Notifications",
+    url: "/admin/notifications",
+    icon: Bell,
   },
   {
     title: "Settings",
