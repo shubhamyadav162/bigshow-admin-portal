@@ -12,7 +12,7 @@ const Index = () => {
         {/* Header */}
         <div className="space-y-2">
           <h1 className="text-3xl font-bold text-foreground">Dashboard Overview</h1>
-          <p className="text-muted-foreground">Welcome back to BigShow OTT Admin Panel</p>
+          <p className="text-muted-foreground">Welcome back to Pitara OTT Admin Panel</p>
         </div>
 
         {/* Stats Cards */}

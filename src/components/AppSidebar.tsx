@@ -52,10 +52,10 @@ export function AppSidebar() {
       <SidebarHeader className="border-b border-sidebar-border">
         <div className="flex items-center gap-2 px-4 py-2">
           <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-lg">B</span>
+            <span className="text-primary-foreground font-bold text-lg">P</span>
           </div>
           <div>
-            <h1 className="text-lg font-bold text-sidebar-foreground">BigShow</h1>
+            <h1 className="text-lg font-bold text-sidebar-foreground">Pitara</h1>
             <p className="text-xs text-sidebar-foreground/70">OTT Admin</p>
           </div>
         </div>
@@ -94,7 +94,7 @@ export function AppSidebar() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-sidebar-foreground">Super Admin</p>
-              <p className="text-xs text-sidebar-foreground/70 truncate">admin@bigshow.com</p>
+              <p className="text-xs text-sidebar-foreground/70 truncate">admin@pitara.com</p>
             </div>
           </div>
         </div>

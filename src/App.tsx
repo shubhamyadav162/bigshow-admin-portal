@@ -10,6 +10,7 @@ import Subscriptions from "./pages/Subscriptions";
 import Users from "./pages/Users";
 import Notifications from "./pages/Notifications";
 import Settings from "./pages/Settings";
+import TestPage from "./pages/TestPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/users" element={<Users />} />
           <Route path="/admin/notifications" element={<Notifications />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/test" element={<TestPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
